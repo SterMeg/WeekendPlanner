@@ -1,7 +1,7 @@
-let app = {};
-
+const app = {};
 
 app.apiURL = 'https://maps.googleapis.com/maps/api/geocode/json';
+app.apiURLPlaces = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 app.apiKey = 'AIzaSyB28C8y1EV7AEymUE7bT5OPoRcbDCDHnaY';
 
 //Call Google API geocode
@@ -42,12 +42,51 @@ app.getWeather = function (lat, lng, day) {
     });
 }
 
+app.getPlaces = function(lat, lng, activity) {
+    $.ajax({
+        url: "http://proxy.hackeryou.com",
+        method: "GET",
+        dataType: "json",
+        data: {
+            reqUrl: app.apiURLPlaces,
+            params: {
+                key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
+                location: `${lat},${lng}`,
+                radius: 500,
+                type: 'restaurant'
+            }
+        }
+    })
+        .then((res) => {
+            //   console.log(res);
+            const place = res.results;
+            console.log(res);
+            // app.displayPlace(place, num);
+        });
+}
+
+//Get icon inside forecast\
+app.getActivity = function (weatherResults) {
+    const icon = weatherResults.icon;
+    let activity;
+    if (icon === 'clear') {
+        activity = 'outDoor';
+    }
+    else {
+        activity = 'inDoor';
+    }
+    return activity;  
+}
+
+// If icon === clear --> outdoor else --> indoors
+
 //Gets current day as number between 0-6
 app.getCurrDate = function () {
     const currDate = new Date;
     currDay = currDate.getDay();
-    // app.getWeekend(currDay);
+    return app.getWeekend(currDay);
 }
+
 
 //Gets array position of Saturday in 10 day forecast data
 app.getWeekend = function(day) {
@@ -75,7 +114,6 @@ app.getWeekend = function(day) {
             arrayPos = 0;
             break;
     } 
-
     return arrayPos;
 }
 
