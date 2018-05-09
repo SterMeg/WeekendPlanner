@@ -4,6 +4,13 @@ app.apiURL = 'https://maps.googleapis.com/maps/api/geocode/json';
 app.apiURLPlaces = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 app.apiKey = 'AIzaSyB28C8y1EV7AEymUE7bT5OPoRcbDCDHnaY';
 
+//all activities
+const inDoor = ['aquarium', 'art_gallery', 'bar', 'movie_theater', 'museum', 'restaurant', 'shopping_mall'];
+const outDoor = ['amusement_park', 'campground', 'park', 'zoo'];
+
+//max number of search results for places
+const placeResultNum = 3;
+
 //Call Google API geocode
 //Get coordinates from inputted address
 app.getLocation = function (locationInput) {
@@ -53,16 +60,41 @@ app.getPlaces = function(lat, lng, activity) {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
                 radius: 500,
-                type: 'restaurant'
+                type: this.randomPlace(inDoor)
             }
         }
     })
         .then((res) => {
             //   console.log(res);
             const place = res.results;
-            console.log(res);
-            // app.displayPlace(place, num);
+            // console.log(place);
+            app.displayPlace(place, placeResultNum);
         });
+}
+
+app.displayPlace = function (place, num) {
+    console.log(place);
+    if (place.length > 0) {
+        for (let i = 0; i < num; i++) {
+            // console.log(place[i]);
+            console.log(place[i].name);
+            console.log(place[i].vicinity);
+            console.log(place[i].rating);
+            console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
+            // console.log()
+            // place[i].vicinity, 
+            // place[i].rating,
+            // place[i].price_level,
+            // geometry: {
+            //     lat: place[i].geometry.location.lat,
+            //     lng: place[i].geometry.location.lng
+            // };
+
+        }
+
+    } else {
+        console.log('no results for selected place');
+    }
 }
 
 //Get icon inside forecast\
@@ -76,6 +108,13 @@ app.getActivity = function (weatherResults) {
         activity = 'inDoor';
     }
     return activity;  
+}
+
+//get the random places from indoor : outdoor activities
+app.randomPlace = function (array) {
+    let rdnNum = Math.floor(Math.random() * array.length);
+    console.log(array[rdnNum]);
+    return array[rdnNum];
 }
 
 // If icon === clear --> outdoor else --> indoors
