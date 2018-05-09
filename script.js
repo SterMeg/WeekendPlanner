@@ -22,20 +22,22 @@ app.getLocation = function (locationInput) {
         console.log(res);
         app.lat = res.results[0]['geometry']['location']['lat'];
         app.lng = res.results[0]['geometry']['location']['lng'];
-        app.getWeather(app.lat, app.lng);
+        app.getWeather(app.lat, app.lng, app.getWeekend(currDay));
     });
 }
 
 
 //Call weather app API to get forecasted weather for location
-app.getWeather = function (lat, lng) {
+app.getWeather = function (lat, lng, day) {
     $.ajax({
         url: `http://api.wunderground.com/api/28cbe1ca6cde9931/forecast10day/geolookup/q/${lat},${lng}.json`,
         method: 'GET',
         dataType: 'jsonp'
     }).then(res => {
-        const forecast = res.forecast.txt_forecast.forecastday[6];
+        const forecast = res.forecast.txt_forecast.forecastday[day];
         console.log(forecast);
+        console.log(app.getWeekend(currDay));
+        
         //I need to get the array position from app.getweekend and pass it into forecast to get data for the closest Saturday
     });
 }
@@ -44,7 +46,7 @@ app.getWeather = function (lat, lng) {
 app.getCurrDate = function () {
     const currDate = new Date;
     currDay = currDate.getDay();
-    app.getWeekend(currDay);
+    // app.getWeekend(currDay);
 }
 
 //Gets array position of Saturday in 10 day forecast data
@@ -73,6 +75,8 @@ app.getWeekend = function(day) {
             arrayPos = 0;
             break;
     } 
+
+    return arrayPos;
 }
 
 
