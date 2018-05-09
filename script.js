@@ -84,9 +84,7 @@ app.getActivity = function (weatherResults) {
 app.getCurrDate = function () {
     const currDate = new Date;
     currDay = currDate.getDay();
-    const theWeekendDay  = app.getWeekend(currDay)
-    return theWeekendDay
-   
+    return app.getWeekend(currDay);  
 }
 
 
