@@ -1,7 +1,7 @@
-let app = {};
-
+const app = {};
 
 app.apiURL = 'https://maps.googleapis.com/maps/api/geocode/json';
+app.apiURLPlaces = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 app.apiKey = 'AIzaSyB28C8y1EV7AEymUE7bT5OPoRcbDCDHnaY';
 
 //Call Google API geocode
@@ -20,9 +20,9 @@ app.getLocation = function (locationInput) {
         }
     }).then(res => {
         console.log(res);
-        app.lat = res.results[0]['geometry']['location']['lat'];
-        app.lng = res.results[0]['geometry']['location']['lng'];
-        app.getWeather(app.lat, app.lng);
+        const lat = res.results[0]['geometry']['location']['lat'];
+        const lng = res.results[0]['geometry']['location']['lng'];
+        app.getWeather(lat, lng);
     });
 }
 
@@ -34,18 +34,61 @@ app.getWeather = function (lat, lng) {
         method: 'GET',
         dataType: 'jsonp'
     }).then(res => {
-        const forecast = res.forecast.txt_forecast.forecastday[6];
-        console.log(forecast);
+        const forecast = res.forecast.txt_forecast.forecastday[app.getCurrDate()];
+        console.log(res);
+        const activity = app.getActivity(forecast);
+        app.getPlaces(lat, lng, activity)
         //I need to get the array position from app.getweekend and pass it into forecast to get data for the closest Saturday
     });
 }
+
+app.getPlaces = function(lat, lng, activity) {
+    $.ajax({
+        url: "http://proxy.hackeryou.com",
+        method: "GET",
+        dataType: "json",
+        data: {
+            reqUrl: app.apiURLPlaces,
+            params: {
+                key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
+                location: `${lat},${lng}`,
+                radius: 500,
+                type: 'restaurant'
+            }
+        }
+    })
+        .then((res) => {
+            //   console.log(res);
+            const place = res.results;
+            console.log(res);
+            // app.displayPlace(place, num);
+        });
+}
+
+//Get icon inside forecast\
+app.getActivity = function (weatherResults) {
+    const icon = weatherResults.icon;
+    let activity;
+    if (icon === 'clear') {
+        activity = 'outDoor';
+    }
+    else {
+        activity = 'inDoor';
+    }
+    return activity;  
+}
+
+// If icon === clear --> outdoor else --> indoors
 
 //Gets current day as number between 0-6
 app.getCurrDate = function () {
     const currDate = new Date;
     currDay = currDate.getDay();
-    app.getWeekend(currDay);
+    const theWeekendDay  = app.getWeekend(currDay)
+    return theWeekendDay
+   
 }
+
 
 //Gets array position of Saturday in 10 day forecast data
 app.getWeekend = function(day) {
@@ -73,6 +116,7 @@ app.getWeekend = function(day) {
             arrayPos = 0;
             break;
     } 
+    return arrayPos;
 }
 
 
