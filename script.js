@@ -44,13 +44,8 @@ app.getWeather = function (lat, lng, day) {
         const forecast = res.forecast.txt_forecast.forecastday[app.getCurrDate()];
         console.log(forecast);
         const activity = app.getActivity(forecast);
-<<<<<<< HEAD
         app.displayWeather(forecast, activity);
         app.getPlaces(lat, lng, activity);
-=======
-        app.getPlaces(lat, lng, activity);
-        //I need to get the array position from app.getweekend and pass it into forecast to get data for the closest Saturday
->>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
     });
 }
 
@@ -70,21 +65,12 @@ app.getPlaces = function(lat, lng, activity) {
             }
         }
     })
-<<<<<<< HEAD
-        .then((res) => {
-            //   console.log(res);
-            const place = res.results;
-            // console.log(res);
-            // app.displayPlace(place, num);
-        });
-=======
     .then((res) => {
         //   console.log(res);
         const place = res.results;
         // console.log(place);
         app.displayPlace(place, placeResultNum, lat, lng);
     });
->>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
 }
     
     app.displayPlace = function (place, num, lat, lng) {
@@ -139,8 +125,6 @@ app.getActivity = function (weatherResults) {
     return suggestedActivity;
 }
 
-<<<<<<< HEAD
-=======
 //get the random places from indoor : outdoor activities
 app.randomPlace = function (array) {
     let rdnNum = Math.floor(Math.random() * array.length);
@@ -183,7 +167,6 @@ function initMap(latNew, lngNew, placesInfo) {
 
 // If icon === clear --> outdoor else --> indoors
 
->>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
 //Gets current day as number between 0-6
 app.getCurrDate = function () {
     const currDate = new Date;
@@ -249,10 +232,7 @@ app.userInput = function () {
 
 //Initialize app
 app.init = function () {
-<<<<<<< HEAD
     $('.response').hide();
-=======
->>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
     app.userInput();
     app.getCurrDate();
 }
