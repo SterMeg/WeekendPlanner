@@ -27,15 +27,15 @@ app.getLocation = function (locationInput) {
         }
     }).then(res => {
         console.log(res);
-        const lat = res.results[0]['geometry']['location']['lat'];
-        const lng = res.results[0]['geometry']['location']['lng'];
-        app.getWeather(lat, lng);
+        app.lat = res.results[0]['geometry']['location']['lat'];
+        app.lng = res.results[0]['geometry']['location']['lng'];
+        app.getWeather(app.lat, app.lng, app.getWeekend(currDay));
     });
 }
 
 
 //Call weather app API to get forecasted weather for location
-app.getWeather = function (lat, lng) {
+app.getWeather = function (lat, lng, day) {
     $.ajax({
         url: `http://api.wunderground.com/api/28cbe1ca6cde9931/forecast10day/geolookup/q/${lat},${lng}.json`,
         method: 'GET',
@@ -166,7 +166,7 @@ function initMap(latNew, lngNew, placesInfo) {
 app.getCurrDate = function () {
     const currDate = new Date;
     currDay = currDate.getDay();
-    return app.getWeekend(currDay);  
+    return app.getWeekend(currDay);
 }
 
 
