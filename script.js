@@ -61,7 +61,7 @@ app.getPlaces = function(lat, lng, activity) {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
                 radius: 500,
-                type: this.randomPlace(inDoor)
+                type: this.randomPlace(activity.text)
             }
         }
     })
