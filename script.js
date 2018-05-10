@@ -9,7 +9,7 @@ const inDoor = ['art_gallery', 'bar', 'movie_theater', 'museum', 'restaurant', '
 const outDoor = ['amusement_park', 'campground', 'park', 'zoo'];
 
 //max number of search results for places
-const placeResultNum = 3;
+// const placeResultNum = 1;
 
 //Call Google API geocode
 //Get coordinates from inputted address
@@ -30,6 +30,7 @@ app.getLocation = function (locationInput) {
         app.lat = res.results[0]['geometry']['location']['lat'];
         app.lng = res.results[0]['geometry']['location']['lng'];
         app.getWeather(app.lat, app.lng, app.getWeekend(currDay));
+        app.drawMap();
     });
 }
 
@@ -70,17 +71,17 @@ app.getPlaces = function(lat, lng, activity, locationType) {
     .then((res) => {
         //   console.log(res);
         const place = res.results;
-        app.displayPlace(place, placeResultNum, lat, lng);
+        app.displayPlace(place, lat, lng);
     });
 }
     
-    app.displayPlace = function (place, num, lat, lng) {
+    app.displayPlace = function (place, lat, lng) {
         console.log(place);
 
         //array that stores all the places info as an object
         let placesArray = [];
         if (place.length > 0) {
-            for (let i = 0; i < num; i++) {
+            for (let i = 0; i < place.length; i++) {
                 // console.log(place[i]);
                 console.log(place[i].name);
                 console.log(place[i].vicinity);
@@ -105,7 +106,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
         } else {
             console.log('no results for selected place');
         }
-        initMap(lat, lng, placesArray);
+        app.initMap(lat, lng, placesArray);
         console.log(placesArray);
     }
 
@@ -135,18 +136,26 @@ app.randomPlace = function (array) {
 }
 
 //creates google map
-function initMap(latNew, lngNew, placesInfo) {
+app.initMap = function (latNew, lngNew, placesInfo) {
     var selectedPlace = { lat: latNew, lng: lngNew };
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
         center: selectedPlace
     });
 
+    var yourLocation = new google.maps.Marker({
+        position: {lat: latNew, lng: lngNew},
+        map: map,
+        icon: 'assets/People_Location-512.png'
+    })
+
+    
     //information window for each marker
     var infowindow = new google.maps.InfoWindow();
-
+    
     var marker, i;
     let markers = [];
+    markers.push(yourLocation);
 
     //loops through all the places
     for (i = 0; i < placesInfo.length; i++) {
@@ -246,6 +255,12 @@ app.init = function () {
     $('.response').hide();
     app.userInput();
     app.getCurrDate();
+}
+
+app.drawMap = function () {
+    var script = document.createElement('script');
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE";
+    document.body.appendChild(script);
 }
 
 //Document ready
