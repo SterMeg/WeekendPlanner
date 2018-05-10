@@ -44,13 +44,14 @@ app.getWeather = function (lat, lng, day) {
         const forecast = res.forecast.txt_forecast.forecastday[app.getCurrDate()];
         console.log(forecast);
         const activity = app.getActivity(forecast);
-        app.displayWeather(forecast, activity);
-        app.getPlaces(lat, lng, activity);
+        const locationType = app.randomPlace(activity.place);
+        app.displayWeather(forecast, activity, locationType);
+        app.getPlaces(lat, lng, activity, locationType);
     });
 }
 
 //Call Google Places API and return place suggestions based on location and weather forecast
-app.getPlaces = function(lat, lng, activity) {
+app.getPlaces = function(lat, lng, activity, locationType) {
     $.ajax({
         url: "http://proxy.hackeryou.com",
         method: "GET",
@@ -60,15 +61,15 @@ app.getPlaces = function(lat, lng, activity) {
             params: {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
-                radius: 500,
-                type: this.randomPlace(activity.text)
+                // radius: 500,
+                rankby: 'distance',
+                type: locationType
             }
         }
     })
     .then((res) => {
         //   console.log(res);
         const place = res.results;
-        // console.log(place);
         app.displayPlace(place, placeResultNum, lat, lng);
     });
 }
@@ -115,11 +116,11 @@ app.getActivity = function (weatherResults) {
     const icon = weatherResults.icon;
     const suggestedActivity = {}
     if (icon === 'clear') {
-        suggestedActivity.place = 'outDoor';
+        suggestedActivity.place = outDoor;
         suggestedActivity.text = `It's supposed to be a beautiful weekend! Get out and enjoy the sun!!`
     }
     else {
-        suggestedActivity.place = 'inDoor';
+        suggestedActivity.place = inDoor;
         suggestedActivity.text = `404 sun not found. Maybe do something indoors.`
     }
     return suggestedActivity;
@@ -129,7 +130,8 @@ app.getActivity = function (weatherResults) {
 app.randomPlace = function (array) {
     let rdnNum = Math.floor(Math.random() * array.length);
     console.log(array[rdnNum]);
-    return array[rdnNum];
+    const placeType = array[rdnNum];
+    return placeType;
 }
 
 //creates google map
@@ -144,6 +146,7 @@ function initMap(latNew, lngNew, placesInfo) {
     var infowindow = new google.maps.InfoWindow();
 
     var marker, i;
+    let markers = [];
 
     //loops through all the places
     for (i = 0; i < placesInfo.length; i++) {
@@ -151,6 +154,14 @@ function initMap(latNew, lngNew, placesInfo) {
             position: new google.maps.LatLng(placesInfo[i].lat, placesInfo[i].lng),
             map: map
         });
+        markers.push(marker);
+
+        const bounds = new google.maps.LatLngBounds();
+        for (let i = 0; i < markers.length; i++) {
+            bounds.extend(markers[i].getPosition());
+        }
+
+        map.fitBounds(bounds);
 
         //event listener for displaying infowindow on click of the markers
         google.maps.event.addListener(marker, 'click', (function (marker, i) {
@@ -205,17 +216,17 @@ app.getWeekend = function(day) {
 }
 
 //Get weather forecast and icon and assign to variables to append to DOM
-app.displayWeather = function (dayForecast, activitySuggestion) {
+app.displayWeather = function (dayForecast, activitySuggestion, locationType) {
     $('.user-input').hide(); // hide search container
     $('.response').fadeIn(); // show results container
 
     $('.suggested-activity').empty(); // empty suggested activity if location searched again
-
     //Store forecast content and then append to container
     const $icon = $('<img>').attr('src', dayForecast.icon_url);
     const $forecastText = $('<h2>').text(dayForecast.fcttext_metric);
     const $activity = $('<p>').text(activitySuggestion.text);
-    const $activityContainer = $('<div>').append($icon, $forecastText, $activity);
+    const $activityType = $('<p>').text(`Here are some nearby ${locationType.replace(/_/, ' ')}s!`);
+    const $activityContainer = $('<div>').append($icon, $forecastText, $activity, $activityType);
     $('.suggested-activity').append($activityContainer);
 }
 
