@@ -5,7 +5,7 @@ app.apiURLPlaces = "https://maps.googleapis.com/maps/api/place/nearbysearch/json
 app.apiKey = 'AIzaSyB28C8y1EV7AEymUE7bT5OPoRcbDCDHnaY';
 
 //all activities
-const inDoor = ['aquarium', 'art_gallery', 'bar', 'movie_theater', 'museum', 'restaurant', 'shopping_mall'];
+const inDoor = ['art_gallery', 'bar', 'movie_theater', 'museum', 'restaurant', 'shopping_mall'];
 const outDoor = ['amusement_park', 'campground', 'park', 'zoo'];
 
 //max number of search results for places
@@ -44,7 +44,7 @@ app.getWeather = function (lat, lng) {
         const forecast = res.forecast.txt_forecast.forecastday[app.getCurrDate()];
         console.log(res);
         const activity = app.getActivity(forecast);
-        app.getPlaces(lat, lng, activity)
+        app.getPlaces(lat, lng, activity);
         //I need to get the array position from app.getweekend and pass it into forecast to get data for the closest Saturday
     });
 }
@@ -64,38 +64,48 @@ app.getPlaces = function(lat, lng, activity) {
             }
         }
     })
-        .then((res) => {
-            //   console.log(res);
-            const place = res.results;
-            // console.log(place);
-            app.displayPlace(place, placeResultNum);
-        });
+    .then((res) => {
+        //   console.log(res);
+        const place = res.results;
+        // console.log(place);
+        app.displayPlace(place, placeResultNum, lat, lng);
+    });
 }
+    
+    app.displayPlace = function (place, num, lat, lng) {
+        console.log(place);
 
-app.displayPlace = function (place, num) {
-    console.log(place);
-    if (place.length > 0) {
-        for (let i = 0; i < num; i++) {
-            // console.log(place[i]);
-            console.log(place[i].name);
-            console.log(place[i].vicinity);
-            console.log(place[i].rating);
-            console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
-            // console.log()
-            // place[i].vicinity, 
-            // place[i].rating,
-            // place[i].price_level,
-            // geometry: {
-            //     lat: place[i].geometry.location.lat,
-            //     lng: place[i].geometry.location.lng
-            // };
+        //array that stores all the places info as an object
+        let placesArray = [];
+        if (place.length > 0) {
+            for (let i = 0; i < num; i++) {
+                // console.log(place[i]);
+                console.log(place[i].name);
+                console.log(place[i].vicinity);
+                console.log(place[i].rating);
+                console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
 
+                
+                //makes an array that holds all the info about the places
+                let placesInfo = {};
+                placesInfo = {
+                    name: place[i].name,
+                    address: place[i].vicinity,
+                    rating: place[i].rating,
+                    lat: place[i].geometry.location.lat,
+                    lng: place[i].geometry.location.lng
+                };
+
+                //pushes all the info to an array
+                placesArray.push(placesInfo);
+            }
+            
+        } else {
+            console.log('no results for selected place');
         }
-
-    } else {
-        console.log('no results for selected place');
+        initMap(lat, lng, placesArray);
+        // console.log(placeName);
     }
-}
 
 //Get icon inside forecast\
 app.getActivity = function (weatherResults) {
@@ -115,6 +125,39 @@ app.randomPlace = function (array) {
     let rdnNum = Math.floor(Math.random() * array.length);
     console.log(array[rdnNum]);
     return array[rdnNum];
+}
+
+//creates google map
+function initMap(latNew, lngNew, placesInfo) {
+    var selectedPlace = { lat: latNew, lng: lngNew };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: selectedPlace
+    });
+
+    //information window for each marker
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    //loops through all the places
+    for (i = 0; i < placesInfo.length; i++) {
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(placesInfo[i].lat, placesInfo[i].lng),
+            map: map
+        });
+
+        //event listener for displaying infowindow on click of the markers
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+                infowindow.setContent(`<p>Name: ${placesInfo[i].name}</p> <p>Address: ${placesInfo[i].address}</p> <p>Rating: ${placesInfo[i].rating}</p>`);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    }
+
+
+    
 }
 
 // If icon === clear --> outdoor else --> indoors
@@ -171,11 +214,17 @@ app.userInput = function () {
 
 //Initialize app
 app.init = function () {
-   app.userInput();
+    app.userInput();
     app.getCurrDate();
 }
 
 //Document ready
 $(function () {
+    //google map script
+    var script = document.createElement('script');
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE&callback=initMap";
+    document.body.appendChild(script);
+
+
     app.init();
 });
