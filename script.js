@@ -60,8 +60,10 @@ app.getPlaces = function(lat, lng, activity) {
             params: {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
-                radius: 500,
-                type: this.randomPlace(activity.text)
+                // radius: 500,
+                rankby: 'distance',
+                type: this.randomPlace(activity.place)
+
             }
         }
     })
@@ -105,7 +107,7 @@ app.getPlaces = function(lat, lng, activity) {
             console.log('no results for selected place');
         }
         initMap(lat, lng, placesArray);
-        // console.log(placeName);
+        console.log(placesArray);
     }
 
 //Get icon inside forecast
@@ -115,11 +117,11 @@ app.getActivity = function (weatherResults) {
     const icon = weatherResults.icon;
     const suggestedActivity = {}
     if (icon === 'clear') {
-        suggestedActivity.place = 'outDoor';
+        suggestedActivity.place = outDoor;
         suggestedActivity.text = `It's supposed to be a beautiful weekend! Get out and enjoy the sun!!`
     }
     else {
-        suggestedActivity.place = 'inDoor';
+        suggestedActivity.place = inDoor;
         suggestedActivity.text = `404 sun not found. Maybe do something indoors.`
     }
     return suggestedActivity;
@@ -240,9 +242,9 @@ app.init = function () {
 //Document ready
 $(function () {
     //google map script
-    var script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE&callback=initMap";
-    document.body.appendChild(script);
+    // var script = document.createElement('script');
+    // script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE&callback=initMap";
+    // document.body.appendChild(script);
 
 
     app.init();
