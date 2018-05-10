@@ -12,12 +12,15 @@ body {
 
 .wrapper {
     align-items: center;
-    display: flex;
-    flex-direction: column;
+    display: flex;   
     height: 100vh;
     justify-content: center;
     max-width: 1070px;
     margin: 0 auto;
+}
+
+.user-input {
+    flex-direction: column;
 }
 
 .loc-input {
