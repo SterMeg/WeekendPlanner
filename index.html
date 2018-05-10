@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Weekend Planner</title>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <form action="">
-        <input type="text" name="location">
-        <input type="submit" value="Get plans!">
-    </form>
-    <div class="suggested-activity">
-
-    </div>
-    <div class="suggested-locations">
-        
-    </div>
+    <div class="wrapper user-input">
+        <h1>Plan your weekend</h1>
+        <form class = "loc-input">
+            <input type="text" name="location">
+            <input type="submit" value="Get plans!">
+        </form>
+    </div><!-- /.wrapper -->
+    <div class="wrapper response">
+        <div class="suggested-activity">
+        </div>
+        <div class="suggested-locations">
+            
+        </div>
+    </div><!-- /.wrapper -->
     <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='crossorigin='anonymous'></script>
     <script src="script.js"></script>
 </body>
