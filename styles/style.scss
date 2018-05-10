@@ -23,6 +23,10 @@ body {
     flex-direction: column;
 }
 
+.response {
+    flex-wrap: wrap;
+}
+
 .loc-input {
     display: flex;
     align-items: center;
@@ -37,6 +41,9 @@ body {
     align-items: center;
     display: flex;
     flex-direction: column;
+    text-align: center;
     width: 33%;
+    padding: 40px;
+    border: 2px solid blue;
 }
 

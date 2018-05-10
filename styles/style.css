@@ -159,6 +159,10 @@ body {
   -ms-flex-direction: column;
   flex-direction: column; }
 
+.response {
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
 .loc-input {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -185,4 +189,7 @@ body {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  width: 33%; }
+  text-align: center;
+  width: 33%;
+  padding: 40px;
+  border: 2px solid blue; }

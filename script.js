@@ -47,6 +47,7 @@ app.getWeather = function (lat, lng, day) {
         const locationType = app.randomPlace(activity.place);
         app.displayWeather(forecast, activity, locationType);
         app.getPlaces(lat, lng, activity, locationType);
+        app.drawMap();
     });
 }
 
@@ -105,7 +106,8 @@ app.getPlaces = function(lat, lng, activity, locationType) {
         } else {
             console.log('no results for selected place');
         }
-        initMap(lat, lng, placesArray);
+        app.initMap(lat, lng, placesArray);
+        console.log(lat, lng)
         // console.log(placeName);
     }
 
@@ -134,11 +136,22 @@ app.randomPlace = function (array) {
     return placeType;
 }
 
+//setup google map
+app.drawMap = function() {
+    //google map script
+    var script = document.createElement('script');
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE";
+    document.body.appendChild(script);
+}
+
+
 //creates google map
-function initMap(latNew, lngNew, placesInfo) {
+app.initMap = function(latNew, lngNew, placesInfo) {
+    console.log(latNew, lngNew)
     var selectedPlace = { lat: latNew, lng: lngNew };
+    console.log(selectedPlace);
     var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
+        // zoom: 15,
         center: selectedPlace
     });
 
@@ -156,6 +169,7 @@ function initMap(latNew, lngNew, placesInfo) {
         });
         markers.push(marker);
 
+        //loops though array of markers and gets position to set bounds of map
         const bounds = new google.maps.LatLngBounds();
         for (let i = 0; i < markers.length; i++) {
             bounds.extend(markers[i].getPosition());
@@ -170,13 +184,9 @@ function initMap(latNew, lngNew, placesInfo) {
                 infowindow.open(map, marker);
             }
         })(marker, i));
-    }
-
-
-    
+    }   
 }
 
-// If icon === clear --> outdoor else --> indoors
 
 //Gets current day as number between 0-6
 app.getCurrDate = function () {
@@ -250,11 +260,5 @@ app.init = function () {
 
 //Document ready
 $(function () {
-    //google map script
-    var script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE&callback=initMap";
-    document.body.appendChild(script);
-
-
     app.init();
 });
