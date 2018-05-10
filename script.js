@@ -4,6 +4,13 @@ app.apiURL = 'https://maps.googleapis.com/maps/api/geocode/json';
 app.apiURLPlaces = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 app.apiKey = 'AIzaSyB28C8y1EV7AEymUE7bT5OPoRcbDCDHnaY';
 
+//all activities
+const inDoor = ['art_gallery', 'bar', 'movie_theater', 'museum', 'restaurant', 'shopping_mall'];
+const outDoor = ['amusement_park', 'campground', 'park', 'zoo'];
+
+//max number of search results for places
+const placeResultNum = 3;
+
 //Call Google API geocode
 //Get coordinates from inputted address
 app.getLocation = function (locationInput) {
@@ -20,15 +27,15 @@ app.getLocation = function (locationInput) {
         }
     }).then(res => {
         console.log(res);
-        const lat = res.results[0]['geometry']['location']['lat'];
-        const lng = res.results[0]['geometry']['location']['lng'];
-        app.getWeather(lat, lng);
+        app.lat = res.results[0]['geometry']['location']['lat'];
+        app.lng = res.results[0]['geometry']['location']['lng'];
+        app.getWeather(app.lat, app.lng, app.getWeekend(currDay));
     });
 }
 
 
 //Call weather app API to get forecasted weather for location
-app.getWeather = function (lat, lng) {
+app.getWeather = function (lat, lng, day) {
     $.ajax({
         url: `http://api.wunderground.com/api/28cbe1ca6cde9931/forecast10day/geolookup/q/${lat},${lng}.json`,
         method: 'GET',
@@ -37,8 +44,13 @@ app.getWeather = function (lat, lng) {
         const forecast = res.forecast.txt_forecast.forecastday[app.getCurrDate()];
         console.log(forecast);
         const activity = app.getActivity(forecast);
+<<<<<<< HEAD
         app.displayWeather(forecast, activity);
         app.getPlaces(lat, lng, activity);
+=======
+        app.getPlaces(lat, lng, activity);
+        //I need to get the array position from app.getweekend and pass it into forecast to get data for the closest Saturday
+>>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
     });
 }
 
@@ -54,17 +66,61 @@ app.getPlaces = function(lat, lng, activity) {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
                 radius: 500,
-                type: 'restaurant'
+                type: this.randomPlace(inDoor)
             }
         }
     })
+<<<<<<< HEAD
         .then((res) => {
             //   console.log(res);
             const place = res.results;
             // console.log(res);
             // app.displayPlace(place, num);
         });
+=======
+    .then((res) => {
+        //   console.log(res);
+        const place = res.results;
+        // console.log(place);
+        app.displayPlace(place, placeResultNum, lat, lng);
+    });
+>>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
 }
+    
+    app.displayPlace = function (place, num, lat, lng) {
+        console.log(place);
+
+        //array that stores all the places info as an object
+        let placesArray = [];
+        if (place.length > 0) {
+            for (let i = 0; i < num; i++) {
+                // console.log(place[i]);
+                console.log(place[i].name);
+                console.log(place[i].vicinity);
+                console.log(place[i].rating);
+                console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
+
+                
+                //makes an array that holds all the info about the places
+                let placesInfo = {};
+                placesInfo = {
+                    name: place[i].name,
+                    address: place[i].vicinity,
+                    rating: place[i].rating,
+                    lat: place[i].geometry.location.lat,
+                    lng: place[i].geometry.location.lng
+                };
+
+                //pushes all the info to an array
+                placesArray.push(placesInfo);
+            }
+            
+        } else {
+            console.log('no results for selected place');
+        }
+        initMap(lat, lng, placesArray);
+        // console.log(placeName);
+    }
 
 //Get icon inside forecast
 //If statement to categorize weather into indoor and outdoor activities
@@ -83,11 +139,56 @@ app.getActivity = function (weatherResults) {
     return suggestedActivity;
 }
 
+<<<<<<< HEAD
+=======
+//get the random places from indoor : outdoor activities
+app.randomPlace = function (array) {
+    let rdnNum = Math.floor(Math.random() * array.length);
+    console.log(array[rdnNum]);
+    return array[rdnNum];
+}
+
+//creates google map
+function initMap(latNew, lngNew, placesInfo) {
+    var selectedPlace = { lat: latNew, lng: lngNew };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: selectedPlace
+    });
+
+    //information window for each marker
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    //loops through all the places
+    for (i = 0; i < placesInfo.length; i++) {
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(placesInfo[i].lat, placesInfo[i].lng),
+            map: map
+        });
+
+        //event listener for displaying infowindow on click of the markers
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
+                infowindow.setContent(`<p>Name: ${placesInfo[i].name}</p> <p>Address: ${placesInfo[i].address}</p> <p>Rating: ${placesInfo[i].rating}</p>`);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    }
+
+
+    
+}
+
+// If icon === clear --> outdoor else --> indoors
+
+>>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
 //Gets current day as number between 0-6
 app.getCurrDate = function () {
     const currDate = new Date;
     currDay = currDate.getDay();
-    return app.getWeekend(currDay);  
+    return app.getWeekend(currDay);
 }
 
 
@@ -148,12 +249,21 @@ app.userInput = function () {
 
 //Initialize app
 app.init = function () {
+<<<<<<< HEAD
     $('.response').hide();
+=======
+>>>>>>> 9348a308e2fbd8648a6feb5a139c326ddb5457e4
     app.userInput();
     app.getCurrDate();
 }
 
 //Document ready
 $(function () {
+    //google map script
+    var script = document.createElement('script');
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE&callback=initMap";
+    document.body.appendChild(script);
+
+
     app.init();
 });
