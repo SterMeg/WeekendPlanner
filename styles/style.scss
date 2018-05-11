@@ -8,8 +8,12 @@ html {
 body {
     font-size: 1.6rem;
     line-height: 1.6;
+    background: url(../assets/FreeVector-Weather-Pattern.jpg);
 }
 
+h2 {
+    font-size: 2.2rem;
+}
 .wrapper {
     align-items: center;
     display: flex;   
@@ -38,12 +42,14 @@ body {
 }
 
 .suggested-activity {
+    background: #fff;
     align-items: center;
     display: flex;
     flex-direction: column;
+    margin-right: 20px;
     text-align: center;
-    width: 33%;
+    width: calc(33% - 20px);
     padding: 40px;
-    border: 2px solid blue;
+    box-shadow: 0px 0px 2px blue;
 }
 

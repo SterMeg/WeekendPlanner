@@ -48,7 +48,6 @@ app.getWeather = function (lat, lng, day) {
         const locationType = app.randomPlace(activity.place);
         app.displayWeather(forecast, activity, locationType);
         app.getPlaces(lat, lng, activity, locationType);
-        app.drawMap();
     });
 }
 
@@ -63,7 +62,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
             params: {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
-                // radius: 500,
+                // radius: 5000,
                 rankby: 'distance',
                 type: locationType
             }
@@ -72,6 +71,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
     .then((res) => {
         //   console.log(res);
         const place = res.results;
+        // console.log(place);
         app.displayPlace(place, lat, lng);
     });
 }
@@ -102,8 +102,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
 
                 //pushes all the info to an array
                 placesArray.push(placesInfo);
-            }
-            
+            }     
         } else {
             console.log('no results for selected place');
         }
@@ -118,13 +117,13 @@ app.getPlaces = function(lat, lng, activity, locationType) {
 app.getActivity = function (weatherResults) {
     const icon = weatherResults.icon;
     const suggestedActivity = {}
-    if (icon === 'clear') {
+    if (icon === 'clear' || icon === 'partlycloudy') {
         suggestedActivity.place = outDoor;
         suggestedActivity.text = `It's supposed to be a beautiful weekend! Get out and enjoy the sun!!`
     }
     else {
         suggestedActivity.place = inDoor;
-        suggestedActivity.text = `404 sun not found. Maybe do something indoors.`
+        suggestedActivity.text = `404 Sun not found. Maybe do something indoors.`
     }
     return suggestedActivity;
 }
@@ -258,6 +257,11 @@ app.userInput = function () {
     }); 
 }
 
+//Reset quiz to top
+$('.reset-button').on('click', function () {
+    location.reload();
+    $('html,body').scrollTop(0);
+});
 
 //Initialize app
 app.init = function () {
