@@ -245,12 +245,15 @@ app.displayWeather = function (dayForecast, activitySuggestion, locationType) {
 
     $('.suggested-activity').empty(); // empty suggested activity if location searched again
     //Store forecast content and then append to container
+    const $forecastDay = $('<h2>').text(`Saturday's Forecast`);
     const $icon = $('<img>').attr('src', dayForecast.icon_url);
-    const $forecastText = $('<h2>').text(dayForecast.fcttext_metric);
+    const $forecastText = $('<h3>').text(dayForecast.fcttext_metric);
     const $activity = $('<p>').text(activitySuggestion.text);
-    const $activityType = $('<p>').text(`Here are some nearby ${locationType.replace(/_/, ' ')}s!`);
-    const $activityContainer = $('<div>').append($icon, $forecastText, $activity, $activityType);
+    const $activityType = $('<h2>').text(`Here are some nearby ${locationType.replace(/_/, ' ')}s!`);
+    const $activityContainer = $('<div>').append($forecastDay, $icon, $forecastText, $activity);
+    const $suggestedLocContainer = $('<div>').append($activityType);
     $('.suggested-activity').append($activityContainer);
+    $('.suggested-locations').append($suggestedLocContainer);
 }
 
 

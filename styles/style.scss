@@ -6,14 +6,44 @@ html {
 }
 
 body {
+    color: #494947;
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.6rem;
     line-height: 1.6;
-    background: url(../assets/FreeVector-Weather-Pattern.jpg);
+    background:  linear-gradient(rgba(0, 0, 0, 0.2)), url(../assets/487.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
+h1 {
+    color: #e15554;
+    font-family: 'Varela Round', sans-serif;
+    text-shadow: 1px 1px 2px #fff;
+    font-size: 5rem;
+    padding: 20px 40px;
+    border-radius: 8px;
+    background: lighten(#1799cc, 2%);
+    box-shadow: 2px 2px 20px #12779e;
+    text-transform: uppercase;
+}
 h2 {
     font-size: 2.2rem;
+    @extend h1;
+    font-weight: 700;
+    letter-spacing: 1.5px;
 }
+
+h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+#map {
+    border-radius: 8px; 
+    height: 90%;
+    width: 100%;
+}
+
 .wrapper {
     align-items: center;
     display: flex;   
@@ -34,22 +64,64 @@ h2 {
 .loc-input {
     display: flex;
     align-items: center;
+    box-shadow: 0px 0px 2px darken(#1799cc, 10%);
     justify-content: center;
+    padding: 20px 0;
     width: 80%;
-    height: 80vh;
-    background: rgba(0,0,0, 0.5);
+    background: rgba(225,225,255, 0.9);
     border-radius: 10px;
 }
 
 .suggested-activity {
-    background: #fff;
+    background: rgba(225,225,255, 0.9);
     align-items: center;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
+    height: 80vh;
     margin-right: 20px;
     text-align: center;
     width: calc(33% - 20px);
-    padding: 40px;
-    box-shadow: 0px 0px 2px blue;
+    padding: 20px;
+    box-shadow: 0px 0px 2px darken(#1799cc, 10%);
+    div {
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
 }
 
+.suggested-locations {
+    background: rgba(225,225,255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px darken(#1799cc, 10%);
+    height: 80vh;
+    padding: 20px;
+    width: 66%;
+    h2 {
+        color: #494947;
+    }
+    div {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+}
+
+input[type=submit],
+button {
+    color: #fff;
+    text-shadow: 0.5px 0.5px 0px #fff;
+    border-radius: 8px;
+    background: #e15554;
+    border: 2px solid #fff;
+    padding: 20px;
+    transition: background 0.2s ease-in;
+    &:hover {
+        background: darken(#e15554, 10%);
+    }
+}
