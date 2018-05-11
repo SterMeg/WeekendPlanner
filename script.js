@@ -88,6 +88,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
                 console.log(place[i].vicinity);
                 console.log(place[i].rating);
                 console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
+                // console.log(place[i].photos[0].html_attributions[0]);
 
                 
                 //makes an array that holds all the info about the places
@@ -184,6 +185,11 @@ app.initMap = function (latNew, lngNew, placesInfo) {
 
         map.fitBounds(bounds);
 
+        if (placesInfo[i].rating === undefined){
+            placesInfo[i].rating = 'No rating';
+            
+        }
+        console.log(placesInfo[i].rating);
         //event listener for displaying infowindow on click of the markers
         google.maps.event.addListener(marker, 'click', (function (marker, i) {
             return function () {
