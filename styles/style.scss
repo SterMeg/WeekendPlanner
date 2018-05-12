@@ -51,11 +51,11 @@ h3 {
     margin: 0 auto;
 }
 
-header {
-    padding: 20px 40px;
-    border-radius: 8px;
+.header-text {
     background: lighten(#1799cc, 2%);
     box-shadow: 2px 2px 20px #12779e;
+    padding: 20px 40px;
+    border-radius: 8px;
     text-align: center;
     margin-bottom: 40px;
     width: 80%;
@@ -122,7 +122,7 @@ header {
         justify-content: space-evenly;
     }
     h2 {
-        color: #e15554;
+       color: #e15554;
     }
 }
 

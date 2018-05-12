@@ -184,16 +184,16 @@ h3 {
   max-width: 1070px;
   margin: 0 auto; }
 
-header {
-  padding: 20px 40px;
-  border-radius: 8px;
+.header-text {
   background: #18a0d5;
   -webkit-box-shadow: 2px 2px 20px #12779e;
   box-shadow: 2px 2px 20px #12779e;
+  padding: 20px 40px;
+  border-radius: 8px;
   text-align: center;
   margin-bottom: 40px;
   width: 80%; }
-  header span {
+  .header-text span {
     text-decoration: line-through; }
 
 .user-input {

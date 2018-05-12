@@ -276,14 +276,23 @@ $('.reset-button').on('click', function () {
 //Initialize app
 app.init = function () {
     $('.response').hide();
+    $('.loc-input').hide();
     app.userInput();
     app.getCurrDate();
+    app.showInput();
 }
 
 app.drawMap = function () {
     var script = document.createElement('script');
     script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE";
     document.body.appendChild(script);
+}
+
+app.showInput = function () {
+    $('.header-button').on('click', function() {
+        $('.header-text').hide();
+        $('.loc-input').fadeIn();
+    });
 }
 
 //Document ready
