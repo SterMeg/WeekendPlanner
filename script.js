@@ -105,6 +105,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
                 placesArray.push(placesInfo);
             }     
         } else {
+            $('.suggested-location').append(`Oh no, there's nothing here for this activity! Maybe you should try again, or consider moving someplace cooler!`)
             console.log('no results for selected place');
         }
         app.initMap(lat, lng, placesArray);
@@ -118,7 +119,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
 app.getActivity = function (weatherResults) {
     const icon = weatherResults.icon;
     const suggestedActivity = {}
-    if (icon === 'clear' || icon === 'partlycloudy') {
+    if (icon === 'clear') {
         suggestedActivity.place = outDoor;
         suggestedActivity.text = `It's supposed to be a beautiful weekend! Get out and enjoy the sun!!`
     }

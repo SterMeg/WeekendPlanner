@@ -19,16 +19,14 @@ h1 {
     color: #e15554;
     font-family: 'Varela Round', sans-serif;
     text-shadow: 1px 1px 2px #fff;
-    font-size: 5rem;
-    padding: 20px 40px;
-    border-radius: 8px;
-    background: lighten(#1799cc, 2%);
-    box-shadow: 2px 2px 20px #12779e;
     text-transform: uppercase;
+    font-size: 5rem;
+    margin: 0;
 }
+
 h2 {
     font-size: 2.2rem;
-    @extend h1;
+    font-family: 'Varela Round', sans-serif;
     font-weight: 700;
     letter-spacing: 1.5px;
 }
@@ -53,6 +51,19 @@ h3 {
     margin: 0 auto;
 }
 
+header {
+    padding: 20px 40px;
+    border-radius: 8px;
+    background: lighten(#1799cc, 2%);
+    box-shadow: 2px 2px 20px #12779e;
+    text-align: center;
+    margin-bottom: 40px;
+    width: 80%;
+    span {
+        text-decoration: line-through;
+    }
+}
+
 .user-input {
     flex-direction: column;
 }
@@ -63,13 +74,29 @@ h3 {
 
 .loc-input {
     display: flex;
+    flex-direction: column;
     align-items: center;
     box-shadow: 0px 0px 2px darken(#1799cc, 10%);
+    padding:20px;
     justify-content: center;
-    padding: 20px 0;
     width: 80%;
     background: rgba(225,225,255, 0.9);
     border-radius: 10px;
+    input[type=text] {
+        color: #494947;
+        width: 100%;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0px 0px 2px #12779e;
+        padding: 10px;
+    }
+    h2{
+        margin-bottom: 10px;
+    }
+    h3 {
+        align-self: left;
+    }
 }
 
 .suggested-activity {
@@ -93,6 +120,9 @@ h3 {
         flex-direction: column;
         align-items: center;
         justify-content: space-evenly;
+    }
+    h2 {
+        color: #e15554;
     }
 }
 

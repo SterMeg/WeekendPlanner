@@ -22,7 +22,7 @@ a:focus {
 a:active, a:hover {
   outline: 0; }
 
-h1, h2 {
+h1 {
   font-size: 2em; }
 
 abbr[title] {
@@ -147,20 +147,17 @@ body {
   background-repeat: no-repeat;
   background-size: cover; }
 
-h1, h2 {
+h1 {
   color: #e15554;
   font-family: 'Varela Round', sans-serif;
   text-shadow: 1px 1px 2px #fff;
+  text-transform: uppercase;
   font-size: 5rem;
-  padding: 20px 40px;
-  border-radius: 8px;
-  background: #18a0d5;
-  -webkit-box-shadow: 2px 2px 20px #12779e;
-  box-shadow: 2px 2px 20px #12779e;
-  text-transform: uppercase; }
+  margin: 0; }
 
 h2 {
   font-size: 2.2rem;
+  font-family: 'Varela Round', sans-serif;
   font-weight: 700;
   letter-spacing: 1.5px; }
 
@@ -187,6 +184,18 @@ h3 {
   max-width: 1070px;
   margin: 0 auto; }
 
+header {
+  padding: 20px 40px;
+  border-radius: 8px;
+  background: #18a0d5;
+  -webkit-box-shadow: 2px 2px 20px #12779e;
+  box-shadow: 2px 2px 20px #12779e;
+  text-align: center;
+  margin-bottom: 40px;
+  width: 80%; }
+  header span {
+    text-decoration: line-through; }
+
 .user-input {
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -201,18 +210,36 @@ h3 {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-shadow: 0px 0px 2px #12779e;
   box-shadow: 0px 0px 2px #12779e;
+  padding: 20px;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  padding: 20px 0;
   width: 80%;
   background: rgba(225, 225, 255, 0.9);
   border-radius: 10px; }
+  .loc-input input[type=text] {
+    color: #494947;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+    -webkit-box-shadow: 0px 0px 2px #12779e;
+    box-shadow: 0px 0px 2px #12779e;
+    padding: 10px; }
+  .loc-input h2 {
+    margin-bottom: 10px; }
+  .loc-input h3 {
+    -ms-flex-item-align: left;
+    align-self: left; }
 
 .suggested-activity {
   background: rgba(225, 225, 255, 0.9);
@@ -252,6 +279,8 @@ h3 {
     -webkit-box-pack: space-evenly;
     -ms-flex-pack: space-evenly;
     justify-content: space-evenly; }
+  .suggested-activity h2 {
+    color: #e15554; }
 
 .suggested-locations {
   background: rgba(225, 225, 255, 0.9);
