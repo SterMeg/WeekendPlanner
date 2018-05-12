@@ -105,7 +105,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
                 placesArray.push(placesInfo);
             }     
         } else {
-            $('.suggested-location').append(`Oh no, there's nothing here for this activity! Maybe you should try again, or consider moving someplace cooler!`)
+            $('.suggested-location').append(`<p>Oh no, there's nothing here for this activity! Maybe you should try again, or consider moving someplace cooler!</p>`);
             console.log('no results for selected place');
         }
         app.initMap(lat, lng, placesArray);
