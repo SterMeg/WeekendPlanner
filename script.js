@@ -62,7 +62,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
             params: {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
-                // radius: 500,
+                // radius: 5000,
                 rankby: 'distance',
                 type: locationType
             }
@@ -71,6 +71,7 @@ app.getPlaces = function(lat, lng, activity, locationType) {
     .then((res) => {
         //   console.log(res);
         const place = res.results;
+        // console.log(place);
         app.displayPlace(place, lat, lng);
     });
 }
@@ -102,13 +103,14 @@ app.getPlaces = function(lat, lng, activity, locationType) {
 
                 //pushes all the info to an array
                 placesArray.push(placesInfo);
-            }
-            
+            }     
         } else {
+            $('.suggested-location').append(`<p>Oh no, there's nothing here for this activity! Maybe you should try again, or consider moving someplace cooler!</p>`);
             console.log('no results for selected place');
         }
         app.initMap(lat, lng, placesArray);
-        console.log(placesArray);
+        console.log(lat, lng)
+        // console.log(placeName);
     }
 
 //Get icon inside forecast
@@ -123,7 +125,7 @@ app.getActivity = function (weatherResults) {
     }
     else {
         suggestedActivity.place = inDoor;
-        suggestedActivity.text = `404 sun not found. Maybe do something indoors.`
+        suggestedActivity.text = `404 Sun not found. Maybe do something indoors.`
     }
     return suggestedActivity;
 }
@@ -136,11 +138,21 @@ app.randomPlace = function (array) {
     return placeType;
 }
 
+//setup google map
+app.drawMap = function() {
+    //google map script
+    var script = document.createElement('script');
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE";
+    document.body.appendChild(script);
+}
+
+
 //creates google map
 app.initMap = function (latNew, lngNew, placesInfo) {
     var selectedPlace = { lat: latNew, lng: lngNew };
+    console.log(selectedPlace);
     var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
+        // zoom: 15,
         center: selectedPlace
     });
 
@@ -166,6 +178,7 @@ app.initMap = function (latNew, lngNew, placesInfo) {
         });
         markers.push(marker);
 
+        //loops though array of markers and gets position to set bounds of map
         const bounds = new google.maps.LatLngBounds();
         for (let i = 0; i < markers.length; i++) {
             bounds.extend(markers[i].getPosition());
@@ -185,13 +198,9 @@ app.initMap = function (latNew, lngNew, placesInfo) {
                 infowindow.open(map, marker);
             }
         })(marker, i));
-    }
-
-
-    
+    }   
 }
 
-// If icon === clear --> outdoor else --> indoors
 
 //Gets current day as number between 0-6
 app.getCurrDate = function () {
@@ -237,12 +246,15 @@ app.displayWeather = function (dayForecast, activitySuggestion, locationType) {
 
     $('.suggested-activity').empty(); // empty suggested activity if location searched again
     //Store forecast content and then append to container
+    const $forecastDay = $('<h2>').text(`Saturday's Forecast`);
     const $icon = $('<img>').attr('src', dayForecast.icon_url);
-    const $forecastText = $('<h2>').text(dayForecast.fcttext_metric);
+    const $forecastText = $('<h3>').text(dayForecast.fcttext_metric);
     const $activity = $('<p>').text(activitySuggestion.text);
-    const $activityType = $('<p>').text(`Here are some nearby ${locationType.replace(/_/, ' ')}s!`);
-    const $activityContainer = $('<div>').append($icon, $forecastText, $activity, $activityType);
+    const $activityType = $('<h2>').text(`Here are some nearby ${locationType.replace(/_/, ' ')}s!`);
+    const $activityContainer = $('<div>').append($forecastDay, $icon, $forecastText, $activity);
+    const $suggestedLocContainer = $('<div>').append($activityType);
     $('.suggested-activity').append($activityContainer);
+    $('.suggested-locations').append($suggestedLocContainer);
 }
 
 
@@ -255,12 +267,19 @@ app.userInput = function () {
     }); 
 }
 
+//Reset quiz to top
+$('.reset-button').on('click', function () {
+    location.reload();
+    $('html,body').scrollTop(0);
+});
 
 //Initialize app
 app.init = function () {
     $('.response').hide();
+    $('.loc-input').hide();
     app.userInput();
     app.getCurrDate();
+    app.showInput();
 }
 
 app.drawMap = function () {
@@ -269,8 +288,14 @@ app.drawMap = function () {
     document.body.appendChild(script);
 }
 
+app.showInput = function () {
+    $('.header-button').on('click', function() {
+        $('.header-text').hide();
+        $('.loc-input').fadeIn();
+    });
+}
+
 //Document ready
 $(function () {
-
     app.init();
 });
