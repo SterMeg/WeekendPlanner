@@ -8,8 +8,6 @@ app.apiKey = 'AIzaSyB28C8y1EV7AEymUE7bT5OPoRcbDCDHnaY';
 const inDoor = ['art_gallery', 'bar', 'movie_theater', 'museum', 'restaurant', 'shopping_mall'];
 const outDoor = ['amusement_park', 'campground', 'park', 'zoo'];
 
-//max number of search results for places
-// const placeResultNum = 1;
 
 //Call Google API geocode
 //Get coordinates from inputted address
@@ -62,56 +60,49 @@ app.getPlaces = function(lat, lng, activity, locationType) {
             params: {
                 key: "AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE",
                 location: `${lat},${lng}`,
-                // radius: 5000,
                 rankby: 'distance',
                 type: locationType
             }
         }
     })
     .then((res) => {
-        //   console.log(res);
         const place = res.results;
-        // console.log(place);
         app.displayPlace(place, lat, lng);
     });
 }
-    
-    app.displayPlace = function (place, lat, lng) {
-        console.log(place);
+ 
 
-        //array that stores all the places info as an object
-        let placesArray = [];
-        if (place.length > 0) {
-            for (let i = 0; i < place.length; i++) {
-                // console.log(place[i]);
-                console.log(place[i].name);
-                console.log(place[i].vicinity);
-                console.log(place[i].rating);
-                console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
-                // console.log(place[i].photos[0].html_attributions[0]);
+app.displayPlace = function (place, lat, lng) {
+    //array that stores all the places info as an object
+    let placesArray = [];
+    if (place.length > 0) {
+        for (let i = 0; i < place.length; i++) {
+            console.log(place[i].name);
+            console.log(place[i].vicinity);
+            console.log(place[i].rating);
+            console.log(place[i].geometry.location.lat, place[i].geometry.location.lng);
+            
+            //makes an array that holds all the info about the places
+            let placesInfo = {};
+            placesInfo = {
+                name: place[i].name,
+                address: place[i].vicinity,
+                rating: place[i].rating,
+                lat: place[i].geometry.location.lat,
+                lng: place[i].geometry.location.lng
+            };
 
-                
-                //makes an array that holds all the info about the places
-                let placesInfo = {};
-                placesInfo = {
-                    name: place[i].name,
-                    address: place[i].vicinity,
-                    rating: place[i].rating,
-                    lat: place[i].geometry.location.lat,
-                    lng: place[i].geometry.location.lng
-                };
-
-                //pushes all the info to an array
-                placesArray.push(placesInfo);
-            }     
-        } else {
-            $('.suggested-location').append(`<p>Oh no, there's nothing here for this activity! Maybe you should try again, or consider moving someplace cooler!</p>`);
-            console.log('no results for selected place');
-        }
+            //pushes all the info to an array
+            placesArray.push(placesInfo);
+        }     
+        // Initializes map if locations are found
         app.initMap(lat, lng, placesArray);
-        console.log(lat, lng)
-        // console.log(placeName);
+    } else {
+        //Displays fallback text if no locations are found
+        $('#map').append(`<h3>Oh no, there's nothing here for this activity! Maybe you should try again, or consider moving someplace cooler!</h3>`);
+        console.log('no results for selected place');
     }
+}
 
 //Get icon inside forecast
 //If statement to categorize weather into indoor and outdoor activities
@@ -156,6 +147,7 @@ app.initMap = function (latNew, lngNew, placesInfo) {
         center: selectedPlace
     });
 
+    // Places marker with your location
     var yourLocation = new google.maps.Marker({
         position: {lat: latNew, lng: lngNew},
         map: map,
@@ -163,7 +155,7 @@ app.initMap = function (latNew, lngNew, placesInfo) {
     })
 
     
-    //information window for each marker
+    //information window for each returned place marker
     var infowindow = new google.maps.InfoWindow();
     
     var marker, i;
@@ -267,7 +259,7 @@ app.userInput = function () {
     }); 
 }
 
-//Reset quiz to top
+//Reset app
 $('.reset-button').on('click', function () {
     location.reload();
     $('html,body').scrollTop(0);
@@ -282,12 +274,14 @@ app.init = function () {
     app.showInput();
 }
 
+//Draw map
 app.drawMap = function () {
     var script = document.createElement('script');
     script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCiWIEylBJ4a0DGvCPOZnFN3WAlM1zJiJE";
     document.body.appendChild(script);
 }
 
+//Show and hide on initial screen
 app.showInput = function () {
     $('.header-button').on('click', function() {
         $('.header-text').hide();
