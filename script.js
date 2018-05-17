@@ -13,7 +13,7 @@ const outDoor = ['amusement_park', 'campground', 'park', 'zoo'];
 //Get coordinates from inputted address
 app.getLocation = function (locationInput) {
     $.ajax({
-        url: "http://proxy.hackeryou.com",
+        url: "https://proxy.hackeryou.com",
         method: "GET",
         dataType: "json",
         data: {
@@ -36,7 +36,7 @@ app.getLocation = function (locationInput) {
 //Call weather app API to get forecasted weather for location
 app.getWeather = function (lat, lng, day) {
     $.ajax({
-        url: `http://api.wunderground.com/api/28cbe1ca6cde9931/forecast10day/geolookup/q/${lat},${lng}.json`,
+        url: `https://api.wunderground.com/api/28cbe1ca6cde9931/forecast10day/geolookup/q/${lat},${lng}.json`,
         method: 'GET',
         dataType: 'jsonp'
     }).then(res => {
@@ -52,7 +52,7 @@ app.getWeather = function (lat, lng, day) {
 //Call Google Places API and return place suggestions based on location and weather forecast
 app.getPlaces = function(lat, lng, activity, locationType) {
     $.ajax({
-        url: "http://proxy.hackeryou.com",
+        url: "https://proxy.hackeryou.com",
         method: "GET",
         dataType: "json",
         data: {
